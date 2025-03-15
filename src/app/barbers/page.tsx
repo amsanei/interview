@@ -1,4 +1,5 @@
 import BarberCard from "@/components/ui/BarberCard";
+import FillterPanel from "@/components/ui/FillterPanel";
 import Search from "@/components/ui/Search";
 import Tab from "@/components/ui/Tab";
 import axios from "axios";
@@ -13,19 +14,48 @@ async function getData() {
   }
 }
 
+async function getServices() {
+  try {
+    const res = await axios.get("https://lookee.nwhco.ir/aapi/services");
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export default async function page({ searchParams }: any) {
   const res = await getData();
   const rawData = res.results;
-  const { search } = await searchParams;
-  const data = search
-    ? rawData.filter((item: any) =>
-        item.fullname.toLowerCase().includes(search.toLowerCase())
+  const servicesList = await getServices();
+
+  const { search, services } = await searchParams;
+
+  let filteredData = rawData;
+
+  if (search)
+    filteredData = rawData.filter((item: any) =>
+      item.fullname.toLowerCase().includes(search.toLowerCase())
+    );
+
+  if (services) {
+    const requiredServices = services.split(",");
+
+    filteredData = filteredData.filter((item: any) =>
+      requiredServices.every((service: any) =>
+        item.services.some(
+          (s: any) => s.toLowerCase() === service.toLowerCase()
+        )
       )
-    : rawData;
+    );
+  }
 
   return (
     <div>
       <Search />
+      <FillterPanel
+        services={servicesList.results}
+        defaultValue={services?.split(",")}
+      />
       <Tab
         headers={[
           { text: "all", key: "all" },
@@ -36,7 +66,7 @@ export default async function page({ searchParams }: any) {
           {
             content: (
               <div className="grid grid-cols-3 gap-10">
-                {data.map((item: any) => (
+                {filteredData.map((item: any) => (
                   <BarberCard key={item.slug} item={item} />
                 ))}
               </div>
@@ -46,7 +76,7 @@ export default async function page({ searchParams }: any) {
           {
             content: (
               <div className="grid grid-cols-3 gap-10">
-                {data
+                {filteredData
                   .filter((item: any) => item.is_shop)
                   .map((item: any) => (
                     <BarberCard key={item.slug} item={item} />
@@ -58,7 +88,7 @@ export default async function page({ searchParams }: any) {
           {
             content: (
               <div className="grid grid-cols-3 gap-10">
-                {data
+                {filteredData
                   .filter((item: any) => !item.is_shop)
                   .map((item: any) => (
                     <BarberCard key={item.slug} item={item} />
