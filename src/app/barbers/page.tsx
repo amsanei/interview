@@ -1,4 +1,5 @@
 import BarberCard from "@/components/ui/BarberCard";
+import Search from "@/components/ui/Search";
 import Tab from "@/components/ui/Tab";
 import axios from "axios";
 import Image from "next/image";
@@ -12,11 +13,19 @@ async function getData() {
   }
 }
 
-export default async function page() {
-  const data = await getData();
+export default async function page({ searchParams }: any) {
+  const res = await getData();
+  const rawData = res.results;
+  const { search } = await searchParams;
+  const data = search
+    ? rawData.filter((item: any) =>
+        item.fullname.toLowerCase().includes(search.toLowerCase())
+      )
+    : rawData;
 
   return (
     <div>
+      <Search />
       <Tab
         headers={[
           { text: "all", key: "all" },
@@ -27,7 +36,7 @@ export default async function page() {
           {
             content: (
               <div className="grid grid-cols-3 gap-10">
-                {data.results.map((item: any) => (
+                {data.map((item: any) => (
                   <BarberCard item={item} />
                 ))}
               </div>
@@ -37,9 +46,11 @@ export default async function page() {
           {
             content: (
               <div className="grid grid-cols-3 gap-10">
-                {data.results.filter((item: any) => item.is_shop).map((item: any) => (
-                  <BarberCard item={item} />
-                ))}
+                {data
+                  .filter((item: any) => item.is_shop)
+                  .map((item: any) => (
+                    <BarberCard item={item} />
+                  ))}
               </div>
             ),
             key: "shops",
@@ -47,9 +58,11 @@ export default async function page() {
           {
             content: (
               <div className="grid grid-cols-3 gap-10">
-                {data.results.filter((item: any) => !item.is_shop).map((item: any) => (
-                  <BarberCard item={item} />
-                ))}
+                {data
+                  .filter((item: any) => !item.is_shop)
+                  .map((item: any) => (
+                    <BarberCard item={item} />
+                  ))}
               </div>
             ),
             key: "self",
