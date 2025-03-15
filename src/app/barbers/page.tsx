@@ -1,3 +1,5 @@
+import BarberCard from "@/components/ui/BarberCard";
+import Tab from "@/components/ui/Tab";
 import axios from "axios";
 import Image from "next/image";
 
@@ -14,42 +16,46 @@ export default async function page() {
   const data = await getData();
 
   return (
-    <div className="grid grid-cols-3 gap-10">
-      {data.results.map((item: any) => (
-        <div className="" key={item.slug}>
-          <Image
-            src={item.avatar}
-            alt={item.fullname}
-            width={200}
-            height={200}
-            className="w-full h-[30vh] object-cover"
-          />
-          <div className="mt-2">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="font-bold text-lg">{item.fullname}</h2>
-              <div className="flex gap-1 text-sm">
-                <div>{item.reviews_count}</div>
-                <div>*</div>
+    <div>
+      <Tab
+        headers={[
+          { text: "all", key: "all" },
+          { text: "shops", key: "shops" },
+          { text: "self", key: "self" },
+        ]}
+        contents={[
+          {
+            content: (
+              <div className="grid grid-cols-3 gap-10">
+                {data.results.map((item: any) => (
+                  <BarberCard item={item} />
+                ))}
               </div>
-            </div>
-            <div className="flex gap-2">
-              <div>a:</div>
-              <div>{item.address}</div>
-            </div>
-            <div className="flex gap-2">
-              <div>p:</div>
-              <div>{item.phone_number}</div>
-            </div>
-            <div className="flex flex-wrap gap-2 mt-4">
-              {item.services.map((service: string) => (
-                <span className="text-white/60 text-xs uppercase">
-                  # {service}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      ))}
+            ),
+            key: "all",
+          },
+          {
+            content: (
+              <div className="grid grid-cols-3 gap-10">
+                {data.results.filter((item: any) => item.is_shop).map((item: any) => (
+                  <BarberCard item={item} />
+                ))}
+              </div>
+            ),
+            key: "shops",
+          },
+          {
+            content: (
+              <div className="grid grid-cols-3 gap-10">
+                {data.results.filter((item: any) => !item.is_shop).map((item: any) => (
+                  <BarberCard item={item} />
+                ))}
+              </div>
+            ),
+            key: "self",
+          },
+        ]}
+      />
     </div>
   );
 }
