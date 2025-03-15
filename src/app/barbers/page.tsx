@@ -37,7 +37,7 @@ export default async function page({ searchParams }: any) {
             content: (
               <div className="grid grid-cols-3 gap-10">
                 {data.map((item: any) => (
-                  <BarberCard item={item} />
+                  <BarberCard key={item.slug} item={item} />
                 ))}
               </div>
             ),
@@ -49,7 +49,7 @@ export default async function page({ searchParams }: any) {
                 {data
                   .filter((item: any) => item.is_shop)
                   .map((item: any) => (
-                    <BarberCard item={item} />
+                    <BarberCard key={item.slug} item={item} />
                   ))}
               </div>
             ),
@@ -61,7 +61,7 @@ export default async function page({ searchParams }: any) {
                 {data
                   .filter((item: any) => !item.is_shop)
                   .map((item: any) => (
-                    <BarberCard item={item} />
+                    <BarberCard key={item.slug} item={item} />
                   ))}
               </div>
             ),
