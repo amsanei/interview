@@ -59,7 +59,7 @@ export default async function page({ searchParams  }: any) {
             content:
               barbers?.results?.filter((item: any) => !item.is_shop).length >
               0 ? (
-                <div className="grid grid-cols-3 gap-10">
+                <div className="grid md:grid-cols-3 gap-10">
                   {barbers?.results
                     ?.filter((item: any) => item.is_shop)
                     .map((item: any) => (
@@ -75,7 +75,7 @@ export default async function page({ searchParams  }: any) {
             content:
               barbers?.results?.filter((item: any) => !item.is_shop).length >
               0 ? (
-                <div className="grid grid-cols-3 gap-10">
+                <div className="grid md:grid-cols-3 gap-10">
                   {barbers?.results
                     ?.filter((item: any) => !item.is_shop)
                     .map((item: any) => (
