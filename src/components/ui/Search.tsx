@@ -17,13 +17,11 @@ export default function Search() {
     return () => clearTimeout(delayDebounce);
   }, [searchTerm, router]);
   return (
-    <div className="mb-8">
-      <input
-        type="text"
-        placeholder="Search holder"
-        className="px-2 py-1 bg-neutral-800"
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-    </div>
+    <input
+      type="text"
+      placeholder="Search holder"
+      className="px-2 py-1 bg-neutral-800"
+      onChange={(e) => setSearchTerm(e.target.value)}
+    />
   );
 }

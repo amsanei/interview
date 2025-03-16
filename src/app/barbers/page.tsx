@@ -69,7 +69,7 @@ export default async function page({ searchParams }: any) {
         contents={[
           {
             content: (
-              <div className="grid grid-cols-3 gap-10">
+              <div className="grid md:grid-cols-3 gap-10">
                 {filteredData.map((item: any) => (
                   <BarberCard key={item.slug} item={item} />
                 ))}

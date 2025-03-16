@@ -1,6 +1,6 @@
 export default function loading() {
   return (
-    <div className="grid grid-cols-3 gap-10">
+    <div className="grid md:grid-cols-3 gap-10">
       {[1, 2, 3, 4, 5, 6].map((item) => (
         <div key={item}>
           <div className="h-[30vh] animate-pulse bg-neutral-700 "></div>

@@ -38,7 +38,7 @@ export default function FillterPanel({ services, defaultValue }: any) {
         F
       </div>
       <div
-        className={`fixed ${isOpen ? 'left-0' : '-left-full'} transition-all duration-500 h-screen bg-neutral-900/70 backdrop-blur-3xl top-0 w-1/4  p-4 flex flex-col`}
+        className={`fixed ${isOpen ? 'left-0' : '-left-full'} transition-all duration-500 h-screen bg-neutral-900/70 backdrop-blur-3xl top-0 md:w-1/4 w-full  p-4 flex flex-col`}
       >
         <div className="text-3xl font-bold mb-8">
           Select The Service <br /> You Want

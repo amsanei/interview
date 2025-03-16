@@ -8,7 +8,7 @@ export default function BarberCard({ item }: any) {
         alt={item.fullname}
         width={200}
         height={200}
-        className="w-full h-[30vh] object-cover"
+        className="w-full md:h-[40vh] h-[50vh] object-cover"
         unoptimized
       />
       <div className="mt-2">
