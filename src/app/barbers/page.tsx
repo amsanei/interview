@@ -12,6 +12,7 @@ import NoData from "@/components/layout/NoData";
 export default function page() {
   const [barbers, setBarbers] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
@@ -31,7 +32,7 @@ export default function page() {
         setBarbers(res.data);
       } catch (error) {
         console.log(error);
-        throw new Error("Something went wrong! check the console");
+        setError(true);
       } finally {
         setIsLoading(false);
       }
@@ -41,6 +42,8 @@ export default function page() {
       controller.abort();
     };
   }, [search, services]);
+
+  if (error) throw new Error("Something went wrong! check the console");
 
   return isLoading ? (
     <div className="grid md:grid-cols-3 gap-10">
@@ -88,7 +91,7 @@ export default function page() {
           {
             content:
               barbers?.results?.filter((item: any) => !item.is_shop).length >
-              0  && !isLoading  ? (
+                0 && !isLoading ? (
                 <div className="grid grid-cols-3 gap-10">
                   {barbers?.results
                     ?.filter((item: any) => item.is_shop)
@@ -104,7 +107,7 @@ export default function page() {
           {
             content:
               barbers?.results?.filter((item: any) => !item.is_shop).length >
-              0 && !isLoading  ? (
+                0 && !isLoading ? (
                 <div className="grid grid-cols-3 gap-10">
                   {barbers?.results
                     ?.filter((item: any) => !item.is_shop)

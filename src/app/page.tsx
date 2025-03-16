@@ -1,6 +1,3 @@
-import Link from "next/link";
-import Image from "next/image";
-
 export default function Home() {
   return (
     <div className="bg-neutral-800 relative w-full h-[70vh] md:h-[75vh] bg-[url('/barber-shop.jpg')] bg-top md:bg-cover ">
