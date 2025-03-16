@@ -5,12 +5,12 @@ import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import axiosInstance from "@/axios";
 
-export default function FillterPanel({defaultValue} : any) {
+export default function FillterPanel({ defaultValue }: any) {
   const [services, setServices] = useState<any>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedServices, setSelectedServices] = useState<string[]>(defaultValue);
+  const [selectedServices, setSelectedServices] =
+    useState<string[]>(defaultValue);
   const [isLoading, setIsLoading] = useState(false);
-
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,21 +34,29 @@ export default function FillterPanel({defaultValue} : any) {
     );
   };
 
-  const getServices = async () => {
-    try {
-      const res = await axiosInstance.get("/services");
-      setServices(res.data.results);
-    } catch (error) {
-      console.log(error);
-      throw new Error("Something went wrong! check the console");
-    }
-  };
-
   useEffect(() => {
+    const controller = new AbortController();
+    const getServices = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axiosInstance.get("/services");
+        setServices(res.data.results);
+      } catch (error) {
+        console.log(error);
+        throw new Error("Something went wrong! check the console");
+      } finally {
+        setIsLoading(false);
+      }
+    };
     getServices();
+    return () => {
+      controller.abort();
+    };
   }, []);
 
-  return isLoading ? "wait..": services ? (
+  return isLoading ? (
+    "wait.."
+  ) : services ? (
     <>
       <div
         onClick={() => setIsOpen(true)}
@@ -110,5 +118,7 @@ export default function FillterPanel({defaultValue} : any) {
         </button>
       </div>
     </>
-  ): "nodata";
+  ) : (
+    "nodata"
+  );
 }

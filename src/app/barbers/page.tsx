@@ -16,27 +16,30 @@ export default function page() {
   const search = searchParams.get("search");
   const services = searchParams.get("services");
 
-  const getBarbers = async () => {
-    try {
-      setIsLoading(true);
-      const res = await axiosInstance.get("/barbers", {
-        params: {
-          search: search,
-          services : services
-        },
-      });
-      setBarbers(res.data);
-    } catch (error) {
-      console.log(error);
-      throw new Error("Something went wrong! check the console");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const controller = new AbortController();
+    const getBarbers = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axiosInstance.get("/barbers", {
+          params: {
+            search: search,
+            services: services,
+          },
+        });
+        setBarbers(res.data);
+      } catch (error) {
+        console.log(error);
+        throw new Error("Something went wrong! check the console");
+      } finally {
+        setIsLoading(false);
+      }
+    };
     getBarbers();
-  }, [search,services]);
+    return () => {
+      controller.abort();
+    };
+  }, [search, services]);
 
   return isLoading ? (
     "wait...."
@@ -46,9 +49,7 @@ export default function page() {
         actions={
           <div className="flex gap-4">
             <Search />
-            <FillterPanel
-              defaultValue={services ? services?.split(",") : []}
-            />
+            <FillterPanel defaultValue={services ? services?.split(",") : []} />
           </div>
         }
         headers={[
