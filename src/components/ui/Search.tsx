@@ -1,25 +1,29 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 
 export default function Search() {
-  const searchRef = useRef<any>(null);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
-  const handleClick = () => {
-    router.push("?search=" + searchRef.current.value);
-  };
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (searchTerm) {
+        router.push(`?search=${searchTerm}`);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm, router]);
   return (
     <div className="mb-8">
       <input
         type="text"
         placeholder="Search holder"
         className="px-2 py-1 bg-neutral-800"
-        ref={searchRef}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <button onClick={handleClick} className="bg-yellow-400 px-2 py-1 text-black cursor-pointer">s</button>
     </div>
   );
 }
