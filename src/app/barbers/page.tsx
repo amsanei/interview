@@ -5,7 +5,6 @@ import axiosInstance from "@/axios";
 import NoData from "@/components/layout/NoData";
 import FilterOpenBtn from "@/components/ui/FilterOpenBtn";
 
-
 async function getBarbers(params: { search: string; services: string }) {
   try {
     const res = await axiosInstance.get("/barbers", {
@@ -18,9 +17,8 @@ async function getBarbers(params: { search: string; services: string }) {
   }
 }
 
-export default async function page({ searchParams  }: any) {
-  const { search, services } = await searchParams ;
-
+export default async function page({ searchParams }: any) {
+  const { search, services } = await searchParams;
 
   const barbers = await getBarbers({
     search: search,
@@ -29,6 +27,18 @@ export default async function page({ searchParams  }: any) {
 
   return (
     <div>
+      {search && (
+        <div className="text-center md:text-start">
+          <span className="text-neutral-400">Results for searched term :</span>{" "}
+          {search}
+        </div>
+      )}
+      {services && (
+        <div className="text-center md:text-start">
+          <span className="text-neutral-400">Selected services :</span>{" "}
+          {services}
+        </div>
+      )}
       <Tab
         actions={
           <div className="flex gap-4">
