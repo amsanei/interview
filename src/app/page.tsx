@@ -1,15 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="grid md:grid-cols-6 gap-4 v-[90h]">
-      <Link href="/barbers" className="col-span-2 md:col-span-4">
-        <div className="bg-neutral-800 p-4 h-[30vh]  text-xl">list of barbers</div>
-      </Link>
-      <div className="bg-neutral-800 col-span-2 h-[30vh]"></div>
-      <div className="bg-neutral-800 col-span-2 h-[30vh]"></div>
-      <div className="bg-neutral-800 col-span-2 h-[30vh]"></div>
-      <div className="bg-neutral-800 col-span-2 h-[30vh]"></div>
+    <div className="bg-neutral-800 relative w-full h-[70vh] md:h-[75vh] bg-[url('/barber-shop.jpg')] bg-top md:bg-cover ">
+      <div className="absolute inset-0 w-full h-full grid place-content-center md:place-content-end bg-black/70 text-4xl md:text-8xl font-extrabold uppercase text-end">
+        find the best
+      </div>
     </div>
   );
 }
