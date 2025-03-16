@@ -1,63 +1,53 @@
+"use client";
+
 import BarberCard from "@/components/ui/BarberCard";
 import FillterPanel from "@/components/ui/FillterPanel";
 import Search from "@/components/ui/Search";
 import Tab from "@/components/ui/Tab";
-import axios from "axios";
-import Image from "next/image";
+import axiosInstance from "@/axios";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-async function getData() {
-  try {
-    const res = await axios.get("https://lookee.nwhco.ir/aapi/barbers");
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
+export default function page() {
+  const [barbers, setBarbers] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-async function getServices() {
-  try {
-    const res = await axios.get("https://lookee.nwhco.ir/aapi/services");
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
+  const services = searchParams.get("services");
 
-export default async function page({ searchParams }: any) {
-  const res = await getData();
-  const rawData = res.results;
-  const servicesList = await getServices();
+  const getBarbers = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axiosInstance.get("/barbers", {
+        params: {
+          search: search,
+          services : services
+        },
+      });
+      setBarbers(res.data);
+    } catch (error) {
+      console.log(error);
+      throw new Error("Something went wrong! check the console");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  const { search, services } = await searchParams;
+  useEffect(() => {
+    getBarbers();
+  }, [search,services]);
 
-  let filteredData = rawData;
-
-  if (search)
-    filteredData = rawData.filter((item: any) =>
-      item.fullname.toLowerCase().includes(search.toLowerCase())
-    );
-
-  if (services) {
-    const requiredServices = services.split(",");
-
-    filteredData = filteredData.filter((item: any) =>
-      requiredServices.every((service: any) =>
-        item.services.some(
-          (s: any) => s.toLowerCase() === service.toLowerCase()
-        )
-      )
-    );
-  }
-
-  return (
+  return isLoading ? (
+    "wait...."
+  ) : barbers ? (
     <div>
       <Tab
         actions={
           <div className="flex gap-4">
             <Search />
             <FillterPanel
-              services={servicesList.results}
-              defaultValue={services?.split(",")}
+              defaultValue={services ? services?.split(",") : []}
             />
           </div>
         }
@@ -70,7 +60,7 @@ export default async function page({ searchParams }: any) {
           {
             content: (
               <div className="grid md:grid-cols-3 gap-10">
-                {filteredData.map((item: any) => (
+                {barbers?.results?.map((item: any) => (
                   <BarberCard key={item.slug} item={item} />
                 ))}
               </div>
@@ -80,8 +70,8 @@ export default async function page({ searchParams }: any) {
           {
             content: (
               <div className="grid grid-cols-3 gap-10">
-                {filteredData
-                  .filter((item: any) => item.is_shop)
+                {barbers?.results
+                  ?.filter((item: any) => item.is_shop)
                   .map((item: any) => (
                     <BarberCard key={item.slug} item={item} />
                   ))}
@@ -92,8 +82,8 @@ export default async function page({ searchParams }: any) {
           {
             content: (
               <div className="grid grid-cols-3 gap-10">
-                {filteredData
-                  .filter((item: any) => !item.is_shop)
+                {barbers?.results
+                  ?.filter((item: any) => !item.is_shop)
                   .map((item: any) => (
                     <BarberCard key={item.slug} item={item} />
                   ))}
@@ -104,5 +94,7 @@ export default async function page({ searchParams }: any) {
         ]}
       />
     </div>
+  ) : (
+    <div>note ound</div>
   );
 }

@@ -27,8 +27,8 @@ export default function BarberCard({ item }: any) {
         </div>
         <div className="text-sm text-neutral-400">{item.address}</div>
         <div className="flex flex-wrap gap-2 mt-4">
-          {item.services.map((service: string) => (
-            <span className="text-neutral-600 text-xs uppercase">
+          {item.services.map((service: string, index:number) => (
+            <span className="text-neutral-600 text-xs uppercase" key={index}>
               # {service}
             </span>
           ))}

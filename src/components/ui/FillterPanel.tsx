@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import axiosInstance from "@/axios";
 
-export default function FillterPanel({ services, defaultValue }: any) {
+export default function FillterPanel({defaultValue} : any) {
+  const [services, setServices] = useState<any>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedServices, setSelectedServices] = useState<string[]>(
-    defaultValue || []
-  );
+  const [selectedServices, setSelectedServices] = useState<string[]>(defaultValue);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -32,18 +34,40 @@ export default function FillterPanel({ services, defaultValue }: any) {
     );
   };
 
-  return (
+  const getServices = async () => {
+    try {
+      const res = await axiosInstance.get("/services");
+      setServices(res.data.results);
+    } catch (error) {
+      console.log(error);
+      throw new Error("Something went wrong! check the console");
+    }
+  };
+
+  useEffect(() => {
+    getServices();
+  }, []);
+
+  return isLoading ? "wait..": services ? (
     <>
-      <div onClick={() => setIsOpen(true)} className="size-8 rounded-full bg-neutral-800 grid place-content-center">
+      <div
+        onClick={() => setIsOpen(true)}
+        className="size-8 rounded-full bg-neutral-800 grid place-content-center"
+      >
         F
       </div>
       <div
-        className={`fixed ${isOpen ? 'left-0' : '-left-full'} transition-all duration-500 h-screen bg-neutral-900/70 backdrop-blur-3xl top-0 md:w-1/4 w-full  p-4 flex flex-col`}
+        className={`fixed ${
+          isOpen ? "left-0" : "-left-full"
+        } transition-all duration-500 h-screen bg-neutral-900/70 backdrop-blur-3xl top-0 md:w-1/4 w-full  p-4 flex flex-col`}
       >
         <div className="text-3xl font-bold mb-8">
           Select The Service <br /> You Want
         </div>
-        <div onClick={() => setIsOpen(false)} className="absolute cursor-pointer top-4 right-4 border border-neutral-400 rounded-full size-6 bg-neutral-800 grid place-content-center">
+        <div
+          onClick={() => setIsOpen(false)}
+          className="absolute cursor-pointer top-4 right-4 border border-neutral-400 rounded-full size-6 bg-neutral-800 grid place-content-center"
+        >
           ×
         </div>
         <div className="flex flex-col gap-2 overflow-auto h-[70vh]">
@@ -78,12 +102,13 @@ export default function FillterPanel({ services, defaultValue }: any) {
             </div>
           ))}
         </div>
-        <button className="bg-amber-600 px-2 py-1 uppercase mt-auto w-full text-black font-bold cursor-pointer"
-        onClick={submitFillters}
+        <button
+          className="bg-amber-600 px-2 py-1 uppercase mt-auto w-full text-black font-bold cursor-pointer"
+          onClick={submitFillters}
         >
           submit
         </button>
       </div>
     </>
-  );
+  ): "nodata";
 }
