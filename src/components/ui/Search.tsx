@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Search({defaultValue} : any) {
+export default function Search({ defaultValue }: any) {
   const [searchTerm, setSearchTerm] = useState(defaultValue);
   const router = useRouter();
 
@@ -11,6 +11,8 @@ export default function Search({defaultValue} : any) {
     const delayDebounce = setTimeout(() => {
       if (searchTerm) {
         router.push(`?search=${searchTerm}`);
+      } else {
+        router.push(`/barbers`);
       }
     }, 500);
 

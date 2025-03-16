@@ -54,9 +54,7 @@ export default function FillterPanel({ defaultValue }: any) {
     };
   }, []);
 
-  return isLoading ? (
-    "wait.."
-  ) : services ? (
+  return  (
     <>
       <div
         onClick={() => setIsOpen(true)}
@@ -103,7 +101,7 @@ export default function FillterPanel({ defaultValue }: any) {
               ))
             : services?.map((item: any) => (
                 <div
-                  className="flex items-center w-full hover:bg-amber-800 p-2"
+                  className="flex items-center w-full transition-colors hover:bg-neutral-600 p-2"
                   key={item.slug}
                 >
                   <label
@@ -131,7 +129,5 @@ export default function FillterPanel({ defaultValue }: any) {
         </button>
       </div>
     </>
-  ) : (
-    "nodata"
-  );
+  ) 
 }
