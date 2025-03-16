@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## عکس های صفحات
 
-## Getting Started
+![Home page](/shots/home.png)
+![Barbers page](/shots/barbers.png)
 
-First, run the development server:
+
+##  نحوه اجرای پروژه
+
+  
+
+یکی از دستورات زیر را اجرا کنید
+
+  
 
 ```bash
-npm run dev
+
+npm run  dev
+
 # or
+
 yarn dev
+
 # or
+
 pnpm dev
+
 # or
+
 bun dev
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+آدرس [http://localhost:3000](http://localhost:3000) رو توی مرورگرتون باز کنید
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+  
 
-## Learn More
+##  درباره پروژه
 
-To learn more about Next.js, take a look at the following resources:
+  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+تکنولوژی های استفاده شده:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Next.js
 
-## Deploy on Vercel
+- TypeScript
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- tailwind
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- axios
+
+  
+
+پروژه شامل دو صفحه هستش، صفحه خانه به آدرس `/` و صفحه آرایشگران به ادرس `/barbers`
+
+  
+
+صفحه ارایشگران دارای قابلیت جستوجو، فلیتر بندی بر اساس سرویس انتخاب شده و فیلتر بندی بر اساس تب انتخاب شده هستش.
+
+  
+
+از `debounce` در اینپوت جستجو استفاده شده است
+
+  
+
+برای صفحه ارایشگران `loading.tsx` و `error.tsx` پیاده سازی شده است
+
+  
+
+پنل سرویس ها به صورت `lazy` ایمپورت می شود.
+
+  
+
+از `AbortController` در دریافت لیست سرویس ها استفاده شده است.
+
+  
+
+صفحه آرایشگران `server side` پیاده سازی شده است، اما قابلیت های اشاره شده به صورت `client side` پیاده سازی شدند و این دو باهم با استفاده از `url` ارتباط برقرار می کنند
+
+  
+
+پروژه به صورت دارک تم و زبان انگلیسی پیاده سازی شده است. دیزاین پروژه از جایی کپی نشده است
+
+  
+
+##  چالش ها
+
+  
+
+پیاده سازی صفحه آرایشگران به صورت سرور سایدی و پیاده سازی قابلیت ها به صورت کلاینتی چالش برانگیز بود برام.
+
+  
+
+یک نکته جالبی هم که تاحالا ندیده بودم این بود که حجم عکس یکی از آرایشگران شش مگابایت بود، و کامپوننت `Image` نمی تونست اون رو رندر کنه.
+
+  
+
+من اول نفهمیده بودم که فیلتر ها و جستجو سمت بک اند انجام میشن، به همین خاطر سمت فرانت پیاده سازی کرده بودم که کمی چالش برانگیز بودند.
