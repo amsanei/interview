@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Search() {
-  const [searchTerm, setSearchTerm] = useState("");
+export default function Search({defaultValue} : any) {
+  const [searchTerm, setSearchTerm] = useState(defaultValue);
   const router = useRouter();
 
   useEffect(() => {
@@ -21,6 +21,7 @@ export default function Search() {
       type="text"
       placeholder="Search holder"
       className="px-2 py-1 bg-neutral-800"
+      value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
     />
   );

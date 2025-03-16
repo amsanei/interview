@@ -60,9 +60,24 @@ export default function FillterPanel({ defaultValue }: any) {
     <>
       <div
         onClick={() => setIsOpen(true)}
-        className="size-8 rounded-full bg-neutral-800 grid place-content-center"
+        className="size-8 rounded-full bg-neutral-800 grid place-content-center cursor-pointer"
       >
-        F
+        <svg
+          className="w-[22px] h-[22px] text-gray-800 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeWidth="1.6"
+            d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"
+          />
+        </svg>
       </div>
       <div
         className={`fixed ${
@@ -79,39 +94,37 @@ export default function FillterPanel({ defaultValue }: any) {
           ×
         </div>
         <div className="flex flex-col gap-2 overflow-auto h-[70vh]">
-          {services?.map((item: any) => (
-            <div
-              className="flex items-center w-full hover:bg-amber-800 p-2"
-              key={item.slug}
-            >
-              <input
-                type="checkbox"
-                defaultChecked={selectedServices.includes(item.slug)}
-                onChange={() => handleCheckboxChange(item.slug)}
-                id={item.slug}
-              />
-              <label
-                htmlFor={item.slug}
-                className="flex justify-between items-center cursor-pointer w-full"
-              >
-                <div>{item.title}</div>
-                {item.icon ? (
-                  <Image
-                    src={item?.icon}
-                    alt={item.title}
-                    width={100}
-                    height={100}
-                    className="size-6 rounded-full border"
-                  />
-                ) : (
-                  <div className="bg-neutral-800 rounded-full size-6 border"></div>
-                )}
-              </label>
-            </div>
-          ))}
+          {isLoading
+            ? Array.from({ length: 20 }).map((_, index) => (
+                <div
+                  className="h-8 w-full bg-neutral-700 animate-pulse"
+                  key={index}
+                ></div>
+              ))
+            : services?.map((item: any) => (
+                <div
+                  className="flex items-center w-full hover:bg-amber-800 p-2"
+                  key={item.slug}
+                >
+                  <label
+                    htmlFor={item.slug}
+                    className="flex justify-between items-center cursor-pointer w-full group"
+                  >
+                    <input
+                      type="checkbox"
+                      defaultChecked={selectedServices.includes(item.slug)}
+                      onChange={() => handleCheckboxChange(item.slug)}
+                      id={item.slug}
+                      className="hidden peer"
+                    />
+                    <div>{item.title}</div>
+                    <div className=" bg-neutral-800 peer-checked:bg-white rounded-full size-6 border border-neutral-400"></div>
+                  </label>
+                </div>
+              ))}
         </div>
         <button
-          className="bg-amber-600 px-2 py-1 uppercase mt-auto w-full text-black font-bold cursor-pointer"
+          className="bg-white px-2 py-1 uppercase mt-auto w-full text-black font-bold cursor-pointer"
           onClick={submitFillters}
         >
           submit
