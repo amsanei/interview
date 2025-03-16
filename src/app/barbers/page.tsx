@@ -51,12 +51,16 @@ export default async function page({ searchParams }: any) {
 
   return (
     <div>
-      <Search />
-      <FillterPanel
-        services={servicesList.results}
-        defaultValue={services?.split(",")}
-      />
       <Tab
+        actions={
+          <div className="flex gap-4">
+            <Search />
+            <FillterPanel
+              services={servicesList.results}
+              defaultValue={services?.split(",")}
+            />
+          </div>
+        }
         headers={[
           { text: "all", key: "all" },
           { text: "shops", key: "shops" },
